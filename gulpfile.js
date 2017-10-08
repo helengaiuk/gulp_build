@@ -1,5 +1,6 @@
-var gulp = require('gulp'),
-    sass = require('gulp-sass');
+var gulp = require('gulp'), // Подключаем Gulp
+    sass = require('gulp-sass'), //Подключаем Sass пакет,
+    browserSync = require('browser-sync'); // Подключаем Browser Sync
 
 var path = {
     dist: { //Тут мы укажем куда складывать готовые после сборки файлы
@@ -35,12 +36,24 @@ gulp.task('sass', function() { // Создаем таск "sass"
     return gulp.src(path.app.scss) // Берем источник
         .pipe(sass()) // Преобразуем Sass в CSS посредством gulp-sass
         .pipe(gulp.dest('app/css')) // Выгружаем результата в папку app/css
+        .pipe(browserSync.reload({ stream: true })) // Обновляем CSS на странице при изменении
 });
 
-
-
-gulp.task('watch', function() {
+gulp.task('watch:html', ['browser-sync', 'html'], function() {
     gulp.watch(path.watch.html, ['html']); // Наблюдение за html файлами
+    // Наблюдение за другими типами файлов
+});
+
+gulp.task('watch:sass', ['browser-sync', 'sass'], function() {
     gulp.watch(path.watch.scss, ['scss']); // Наблюдение за sass файлами
     // Наблюдение за другими типами файлов
+});
+
+gulp.task('browser-sync', function() { // Создаем таск browser-sync
+    browserSync({ // Выполняем browser Sync
+        server: { // Определяем параметры сервера
+            baseDir: 'app' // Директория для сервера - app
+        },
+        notify: false // Отключаем уведомления
+    });
 });
