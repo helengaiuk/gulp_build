@@ -31,7 +31,6 @@ gulp.task('html', function() {
         .pipe(gulp.dest(path.dist.html)); //Выгружаем их в папку dist
 });
 
-
 gulp.task('sass', function() { // Создаем таск "sass"
     return gulp.src(path.app.scss) // Берем источник
         .pipe(sass()) // Преобразуем Sass в CSS посредством gulp-sass
@@ -53,3 +52,5 @@ gulp.task('watch', ['browser-sync', 'sass'], function() {
     gulp.watch(path.watch.html, browserSync.reload); // Наблюдение за HTML файлами в корне проекта
     gulp.watch(path.watch.js, browserSync.reload); // Наблюдение за JS файлами в папке js
 });
+
+gulp.task('test', ['sass'], function() {});
