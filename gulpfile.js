@@ -39,16 +39,6 @@ gulp.task('sass', function() { // Создаем таск "sass"
         .pipe(browserSync.reload({ stream: true })) // Обновляем CSS на странице при изменении
 });
 
-gulp.task('watch:html', ['browser-sync', 'html'], function() {
-    gulp.watch(path.watch.html, ['html']); // Наблюдение за html файлами
-    // Наблюдение за другими типами файлов
-});
-
-gulp.task('watch:sass', ['browser-sync', 'sass'], function() {
-    gulp.watch(path.watch.scss, ['scss']); // Наблюдение за sass файлами
-    // Наблюдение за другими типами файлов
-});
-
 gulp.task('browser-sync', function() { // Создаем таск browser-sync
     browserSync({ // Выполняем browser Sync
         server: { // Определяем параметры сервера
@@ -56,4 +46,10 @@ gulp.task('browser-sync', function() { // Создаем таск browser-sync
         },
         notify: false // Отключаем уведомления
     });
+});
+
+gulp.task('watch', ['browser-sync', 'sass'], function() {
+    gulp.watch(path.watch.scss, ['scss']); // Наблюдение за sass файлами в папке sass
+    gulp.watch(path.watch.html, browserSync.reload); // Наблюдение за HTML файлами в корне проекта
+    gulp.watch(path.watch.js, browserSync.reload); // Наблюдение за JS файлами в папке js
 });
