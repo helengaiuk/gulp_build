@@ -1,8 +1,12 @@
 var gulp = require('gulp'), // Подключаем Gulp
     sass = require('gulp-sass'), //Подключаем Sass пакет,
-    browserSync = require('browser-sync'), // Подключаем Browser Sync
+    browserSync = require('browser-sync'), // Подключаем Browser Sync (сервер)
     include = require('gulp-include'), // Подключаем gulp-include (для объединения файлов)
-    uglify = require('gulp-uglifyjs'); // Подключаем gulp-uglifyjs (для сжатия JS)
+    uglify = require('gulp-uglifyjs'), // Подключаем gulp-uglifyjs (для сжатия JS)
+    minifycss = require('gulp-minify-css'), // Подключаем gulp-minify-css (для сжатия css)
+    cleancss = require('gulp-clean-css'), // Подключаем gulp-clean-css (для разворачивания css из сжатого вида)
+    autoprefixer = require('gulp-autoprefixer'), // Подключаем gulp-autoprefixer (автоматически добавляет префиксы в css)
+    sourcemaps = require('gulp-sourcemaps');
 
 var path = {
     dist: { //Тут мы укажем куда складывать готовые после сборки файлы
@@ -42,6 +46,11 @@ gulp.task('sass', function() { // Создаем таск "sass"
         .on('error', console.log)
         .pipe(include())
         .pipe(sass()) // Преобразуем Sass в CSS посредством gulp-sass
+        .pipe(autoprefixer({ // Вставляем префиксы для кроссбраузерности
+            browsers: ['last 4 versions'],
+            cascade: false
+        }))
+        .pipe(minifycss()) // Сжимаем CSS 
         .pipe(gulp.dest(path.dist.css)) // Выгружаем результаты в папку dist
         .pipe(browserSync.reload({ stream: true })); // Обновляем CSS на странице при изменении
 });
@@ -52,8 +61,7 @@ gulp.task("js", function() {
         .on('error', console.log)
         .pipe(include())
         .pipe(uglify()) // Сжимаем JS файл
-        .pipe(gulp.dest(path.dist.js)) // Выгружаем результаты в папку dist
-        .pipe(browserSync.reload({ stream: true }));
+        .pipe(gulp.dest(path.dist.js)); // Выгружаем результаты в папку dist
 });
 
 gulp.task('browser-sync', function() { // Создаем таск browser-sync
