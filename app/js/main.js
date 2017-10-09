@@ -1,10 +1,10 @@
 /*
- * Third party
+ * Libs
  */
-//= ../../bower_components/jquery/dist/jquery.js
+//=require ../libs/jquery/dist/jquery.js
 
 
 /*
  * Custom
  */
-//= partials/app.js
+//=require partials/**/*.js
