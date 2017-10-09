@@ -5,6 +5,6 @@
 
 
 /*
- * Custom
+ * Custom test
  */
 //=require partials/**/*.js

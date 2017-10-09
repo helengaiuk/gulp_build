@@ -52,7 +52,8 @@ gulp.task("js", function() {
         .on('error', console.log)
         .pipe(include())
         .pipe(uglify()) // Сжимаем JS файл
-        .pipe(gulp.dest(path.dist.js)); // Выгружаем результаты в папку dist
+        .pipe(gulp.dest(path.dist.js)) // Выгружаем результаты в папку dist
+        .pipe(browserSync.reload({ stream: true }));
 });
 
 gulp.task('browser-sync', function() { // Создаем таск browser-sync
