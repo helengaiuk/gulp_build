@@ -1,7 +1,7 @@
 /*
  * Libs
  */
-//=require ../libs/jquery/dist/jquery.js
+
 
 
 /*
