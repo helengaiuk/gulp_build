@@ -1,10 +1,10 @@
 /*
  * Libs
  */
-
+//=require ../libs/jquery/dist/jquery.js
 
 
 /*
- * Custom test
+ * Custom
  */
 //=require partials/**/*.js

@@ -6,6 +6,7 @@ var gulp = require('gulp'), // Подключаем Gulp
     minifycss = require('gulp-minify-css'), // Подключаем gulp-minify-css (для сжатия css)
     cleancss = require('gulp-clean-css'), // Подключаем gulp-clean-css (для разворачивания css из сжатого вида)
     autoprefixer = require('gulp-autoprefixer'), // Подключаем gulp-autoprefixer (автоматически добавляет префиксы в css)
+    del = require('del'), // Подключаем библиотеку для удаления файлов и папок;
     sourcemaps = require('gulp-sourcemaps');
 
 var path = {
@@ -64,6 +65,13 @@ gulp.task("js", function() {
         .pipe(gulp.dest(path.dist.js)); // Выгружаем результаты в папку dist
 });
 
+gulp.task('build', [
+    'browser-sync',
+    'html',
+    'sass',
+    'js'
+]);
+
 gulp.task('browser-sync', function() { // Создаем таск browser-sync
     browserSync({ // Выполняем browser Sync
         server: { // Определяем параметры сервера
@@ -73,7 +81,11 @@ gulp.task('browser-sync', function() { // Создаем таск browser-sync
     });
 });
 
-gulp.task('watch', ['browser-sync', 'sass'], function() {
+gulp.task('clean', function() {
+    return del.sync('dist'); // Удаляем папку dist перед сборкой
+});
+
+gulp.task('watch', ['clean', 'build'], function() {
     gulp.watch(path.watch.scss, ['sass']); // Наблюдение за scss файлами в папке scss
     gulp.watch(path.watch.html, ['html']); // Наблюдение за HTML файлами в корне проекта
     gulp.watch(path.watch.js, ['js']); // Наблюдение за JS файлами в папке js
