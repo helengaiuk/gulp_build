@@ -7,6 +7,9 @@ var gulp = require('gulp'), // Подключаем Gulp
     cleancss = require('gulp-clean-css'), // Подключаем gulp-clean-css (для разворачивания css из сжатого вида)
     autoprefixer = require('gulp-autoprefixer'), // Подключаем gulp-autoprefixer (автоматически добавляет префиксы в css)
     del = require('del'), // Подключаем библиотеку для удаления файлов и папок;
+    imagemin = require('gulp-imagemin'), // Сжатие картинок
+    pngquant = require('imagemin-pngquant'), // Дополнение к предыдущему плагину с возможностью сжимать png
+    spritesmith = require('gulp.spritesmith'), // Создание спрайтов
     sourcemaps = require('gulp-sourcemaps');
 
 var path = {
@@ -15,13 +18,16 @@ var path = {
         js: 'dist/js/',
         css: 'dist/css/',
         img: 'dist/img/',
+        temp: 'dist/temp/', //Временная директория, после сборки удаляется
         fonts: 'dist/fonts/'
     },
     app: { //Пути откуда брать исходники
         html: 'app/*.html', //Синтаксис app/*.html говорит gulp что мы хотим взять все файлы с расширением .html
         js: 'app/js/main.js', //В стилях и скриптах нам понадобятся только main файлы
         scss: 'app/scss/main.scss',
-        img: 'app/img/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
+        img: 'app/img/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
+        sprite: 'app/img/sprite/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
+        sprite_css: 'app/scss/partials', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
         fonts: 'app/fonts/**/*.*'
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
@@ -65,9 +71,34 @@ gulp.task("js", function() {
         .pipe(gulp.dest(path.dist.js)); // Выгружаем результаты в папку dist
 });
 
+gulp.task('sprite', function() {
+    console.log("-- gulp is running task 'sprite'");
+    var spriteData = gulp.src(path.app.sprite) // путь, откуда берем картинки для спрайта
+        .pipe(spritesmith({
+            imgName: 'sprite.png',
+            cssFormat: 'scss',
+            cssName: 'sprite.scss',
+        }));
+    spriteData.img.pipe(gulp.dest(path.dist.img)); // путь, куда сохраняем картинку
+    spriteData.css.pipe(gulp.dest(path.app.sprite_css)); // путь, куда сохраняем стили
+});
+
+gulp.task('img', ['sprite'], function() { // запустим сначала генерацию спрайта
+    console.log("-- gulp is running task 'img'");
+    gulp.src(path.app.img) //Потом выберем наши картинки
+        .pipe(imagemin({ //Сожмем их
+            progressive: true,
+            svgoPlugins: [{ removeViewBox: false }],
+            use: [pngquant()],
+            interlaced: true
+        }))
+        .pipe(gulp.dest(path.dist.img)); //И бросим в build
+});
+
 gulp.task('build', [
     'browser-sync',
     'html',
+    'img',
     'sass',
     'js'
 ]);
@@ -86,12 +117,13 @@ gulp.task('clean', function() {
 });
 
 gulp.task('watch', ['clean', 'build'], function() {
+    gulp.watch(path.watch.img, ['img']); // Наблюдение за картинками в папке img
     gulp.watch(path.watch.scss, ['sass']); // Наблюдение за scss файлами в папке scss
     gulp.watch(path.watch.html, ['html']); // Наблюдение за HTML файлами в корне проекта
     gulp.watch(path.watch.js, ['js']); // Наблюдение за JS файлами в папке js
 });
 
-/* Осталось добавить импорт и выгрузку картинок, создание спрайтов
+/* 
 Выгрузку шрифтов
-разделить файлы и подгружать только используемое
+разделить файлы css и js и подгружать только используемое
 */
