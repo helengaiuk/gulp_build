@@ -54,10 +54,16 @@ gulp.task('sass', function() { // Создаем таск "sass"
         .on('error', console.log)
         .pipe(include())
         .pipe(sass()) // Преобразуем Sass в CSS посредством gulp-sass
-        .pipe(autoprefixer({ // Вставляем префиксы для кроссбраузерности
-            browsers: ['last 4 versions'],
-            cascade: false
-        }))
+        .pipe(autoprefixer([
+            'Android 2.3',
+            'Android >= 4',
+            'Chrome >= 20',
+            'Firefox >= 24', // Firefox 24 is the latest ESR
+            'Explorer >= 8',
+            'iOS >= 6',
+            'Opera >= 12',
+            'Safari >= 6'
+        ]))
         .pipe(gulp.dest(path.dist.css)) // Выгружаем результаты в папку dist
         .pipe(browserSync.reload({ stream: true }));
 });
