@@ -10,6 +10,7 @@ var gulp = require('gulp'), // Подключаем Gulp
     imagemin = require('gulp-imagemin'), // Сжатие картинок
     pngquant = require('imagemin-pngquant'), // Дополнение к предыдущему плагину с возможностью сжимать png
     spritesmith = require('gulp.spritesmith'), // Создание спрайтов
+    uncss = require('gulp-uncss'), //Удаляет неиспользуемый css
     sourcemaps = require('gulp-sourcemaps');
 
 var path = {
@@ -18,24 +19,35 @@ var path = {
         js: 'dist/js/',
         css: 'dist/css/',
         img: 'dist/img/',
-        sprite_css: 'app/scss/partials',
-        temp: 'dist/temp/', //Временная директория, после сборки удаляется
+        sprite_css: 'app/scss/partials/',
         fonts: 'dist/fonts/'
     },
     app: { //Пути откуда брать исходники
-        html: 'app/*.html', //Синтаксис app/*.html говорит gulp что мы хотим взять все файлы с расширением .html
+        html: [
+            'app/**/*.html',
+            '!app/_template/*.*' // игнорирование файлов шаблона подчеркиванием
+        ],
         js: 'app/js/main.js', //В стилях и скриптах нам понадобятся только main файлы
         scss: 'app/scss/main.scss',
-        img: 'app/img/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
-        sprite: 'app/img_sprite/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
+        img: [
+            'app/img/**/*.*',
+            '!app/img/sprite/*.*' // игнорирование файлов для спрайта
+        ],
+        sprite: 'app/img/sprite/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
         fonts: 'app/fonts/**/*.*'
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
-        html: 'app/**/*.html',
+        html: [
+            'app/**/*.html',
+            '!app/_template/*.*' // игнорирование файлов шаблона подчеркиванием
+        ],
         js: 'app/js/**/*.js',
         scss: 'app/scss/**/*.scss',
-        img: 'app/img/**/*.*',
-        sprite: 'app/img_sprite/**/*.*',
+        img: [
+            'app/img/**/*.*',
+            '!app/img/sprite/*.*' // игнорирование файлов для спрайта
+        ],
+        sprite: 'app/img/sprite/**/*.*',
         fonts: 'app/fonts/**/*.*'
     }
 };
@@ -46,6 +58,7 @@ gulp.task('html', function() {
         .on('error', console.log)
         .pipe(include())
         .pipe(gulp.dest(path.dist.html)); //Выгружаем их в папку dist
+
 });
 
 gulp.task('sass', function() { // Создаем таск "sass"
@@ -125,7 +138,16 @@ gulp.task('build', [
 ]);
 
 
-gulp.task('minimize:all', function() {
+gulp.task('watch', ['build'], function() {
+    gulp.watch(path.watch.img, ['img']); // Наблюдение за картинками в папке img
+    gulp.watch(path.watch.sprite, ['sprite']); // Наблюдение за картинками в папке img_sprite
+    gulp.watch(path.watch.scss, ['sass']); // Наблюдение за scss файлами в папке scss
+    gulp.watch(path.watch.html, ['html']); // Наблюдение за HTML файлами в корне проекта
+    gulp.watch(path.watch.js, ['js']); // Наблюдение за JS файлами в папке js
+    gulp.watch(path.watch.fonts, ['fonts']); // Наблюдение за fonts файлами в папке fonts
+});
+
+gulp.task('final', ['build'], function() {
     console.log("-- gulp is running task 'minimize:img'");
     gulp.src(path.dist.img + '**/*.*') //Выберем наши картинки в dist
         .pipe(imagemin({ //Сожмем их
@@ -138,35 +160,12 @@ gulp.task('minimize:all', function() {
 
     console.log("-- gulp is running task 'minimize:css'");
     gulp.src(path.dist.css + '**/*.*')
+        .pipe(uncss({ html: [path.dist.html + '**/*.html'] }))
         .pipe(minifycss()) // Сжимаем CSS 
         .pipe(gulp.dest(path.dist.css)) //И бросим туда же
-
 
     console.log("-- gulp is running task 'minimize:js'");
     gulp.src(path.dist.js + '**/*.*')
         .pipe(uglify()) // Сжимаем JS файл
         .pipe(gulp.dest(path.dist.js)); // Выгружаем результаты назад в папку dist
 });
-
-gulp.task('watch:all', function() {
-    gulp.watch(path.watch.img, ['img']); // Наблюдение за картинками в папке img
-    gulp.watch(path.watch.sprite, ['sprite']); // Наблюдение за картинками в папке img_sprite
-    gulp.watch(path.watch.scss, ['sass']); // Наблюдение за scss файлами в папке scss
-    gulp.watch(path.watch.html, ['html']); // Наблюдение за HTML файлами в корне проекта
-    gulp.watch(path.watch.js, ['js']); // Наблюдение за JS файлами в папке js
-    gulp.watch(path.watch.fonts, ['fonts']); // Наблюдение за fonts файлами в папке js
-});
-
-gulp.task('watch', [
-    'build',
-    'watch:all'
-]);
-
-gulp.task('final', [
-    'build',
-    'minimize:all'
-]);
-
-/* 
-разделить файлы css и js и подгружать только используемое
-*/
