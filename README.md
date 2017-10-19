@@ -16,23 +16,23 @@ Structure of `app` folder:
 
 `| img` (in root we put images)
 
-`  |- sprite` (in this folder we put images to generate sprite)
+`|--- sprite` (in this folder we put images to generate sprite)
 
 `| js`
 
-`  |- libs` (put js libraries into this folder)
+`|--- libs` (put js libraries into this folder)
 
-`  |- partials` (put your js code here)
+`|--- partials` (put your js code here)
 
-`  main.js` (there is main file that connects all other js filed. do not edit it)
+`|--- main.js` (there is main file that connects all other js filed. do not edit it)
 
 `| scss` 
 
-`  |- mixins` (put scss mixins into this folder)
+`|--- mixins` (put scss mixins into this folder)
 
-`  |- partials` (put your scss code here)
+`|--- partials` (put your scss code here)
 
-`  main.scss` (there is main file that connects all other scss filed. do not edit it)
+`|--- main.scss` (there is main file that connects all other scss filed. do not edit it)
 
 `index.html` (main html file)
 
