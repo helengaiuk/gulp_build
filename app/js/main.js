@@ -1,10 +1,2 @@
-/*
- * Libs
- */
-//=require ../libs/jquery/dist/jquery.js
-
-
-/*
- * Custom
- */
+//=require libs/**/*.js
 //=require partials/**/*.js

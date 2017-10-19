@@ -1,73 +1,79 @@
-var gulp = require('gulp'), // Подключаем Gulp
-    sass = require('gulp-sass'), //Подключаем Sass пакет,
-    browserSync = require('browser-sync'), // Подключаем Browser Sync (сервер)
-    include = require('gulp-include'), // Подключаем gulp-include (для объединения файлов)
-    uglify = require('gulp-uglifyjs'), // Подключаем gulp-uglifyjs (для сжатия JS)
-    minifycss = require('gulp-minify-css'), // Подключаем gulp-minify-css (для сжатия css)
-    cleancss = require('gulp-clean-css'), // Подключаем gulp-clean-css (для разворачивания css из сжатого вида)
-    autoprefixer = require('gulp-autoprefixer'), // Подключаем gulp-autoprefixer (автоматически добавляет префиксы в css)
-    del = require('del'), // Подключаем библиотеку для удаления файлов и папок;
-    imagemin = require('gulp-imagemin'), // Сжатие картинок
-    pngquant = require('imagemin-pngquant'), // Дополнение к предыдущему плагину с возможностью сжимать png
-    spritesmith = require('gulp.spritesmith'), // Создание спрайтов
-    uncss = require('gulp-uncss'), //Удаляет неиспользуемый css
+/*
+
+Gulp build 
+by Helen Gaiuk
+helengaiuk.github.io
+
+*/
+
+
+var gulp = require('gulp'), // Connect Gulp
+    sass = require('gulp-sass'), //Connect Sass package,
+    browserSync = require('browser-sync'), // Connect Browser Sync live realtime desktop http server
+    include = require('gulp-include'), // Connect gulp-include (to merge files)
+    uglify = require('gulp-uglifyjs'), // Connect gulp-uglifyjs (to minify JS)
+    minifycss = require('gulp-minify-css'), // Connect gulp-minify-css (to compressed css)
+    cleancss = require('gulp-clean-css'), // Connect gulp-clean-css (makes normall full view css from a compressed view)
+    autoprefixer = require('gulp-autoprefixer'), // Connect gulp-autoprefixer (automatically adds prefixes to css)
+    del = require('del'), // Connect the library to delete files and folders;
+    imagemin = require('gulp-imagemin'), // Image Compression
+    pngquant = require('imagemin-pngquant'), // Addition to the previous plugin with the ability to compress png
+    spritesmith = require('gulp.spritesmith'), // Creating sprites
+    uncss = require('gulp-uncss'), //Removes unused in project css code 
     sourcemaps = require('gulp-sourcemaps');
 
 var path = {
-    dist: { //Тут мы укажем куда складывать готовые после сборки файлы
+    dist: { //folder of the finished project - distributive
         html: 'dist/',
         js: 'dist/js/',
         css: 'dist/css/',
         img: 'dist/img/',
-        sprite_css: 'app/scss/partials/',
+        sprite_css: 'app/scss/mixins/',
         fonts: 'dist/fonts/'
     },
-    app: { //Пути откуда брать исходники
+    app: { //folder of working files of the project - application
         html: [
-            'app/**/*.html',
-            '!app/_template/*.*' // игнорирование файлов шаблона подчеркиванием
+            'app/**/*.html', //include all html files in all folders
+            '!app/_template/*.*' //exclude templates folder
         ],
-        js: 'app/js/main.js', //В стилях и скриптах нам понадобятся только main файлы
-        scss: 'app/scss/main.scss',
+        js: 'app/js/main.js', //include only the main js file, which is already compiled from other files
+        scss: 'app/scss/main.scss', //include only the main scss file, which is already compiled from other files
         img: [
-            'app/img/**/*.*',
-            '!app/img/sprite/*.*' // игнорирование файлов для спрайта
+            'app/img/**/*.*', //include all files in the child directories in the 'img' folder
+            '!app/img/sprite/*.*' //exclude 'sprite' folder
         ],
-        sprite: 'app/img/sprite/**/*.*', //Синтаксис img/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
-        fonts: 'app/fonts/**/*.*'
+        sprite: 'app/img/sprite/**/*.*', //include all files in the child directories in the 'sprite' folder
+        fonts: 'app/fonts/**/*.*' //include all files in the child directories in the 'fonts' folder
     },
-    watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
-        html: [
-            'app/**/*.html',
-            '!app/_template/*.*' // игнорирование файлов шаблона подчеркиванием
-        ],
-        js: 'app/js/**/*.js',
-        scss: 'app/scss/**/*.scss',
+    watch: { //what files we want to watch
+        html: 'app/**/*.html', //watch all html files in all folders
+        js: 'app/js/**/*.js', //watch all files in the child directories in the 'js' folder
+        scss: 'app/scss/**/*.scss', //watch all scss files in the child directories in the 'scss' folder
         img: [
-            'app/img/**/*.*',
-            '!app/img/sprite/*.*' // игнорирование файлов для спрайта
+            'app/img/**/*.*', //watch all files in the child directories in the 'img' folder
+            '!app/img/sprite/*.*' //except 'sprite' folder
         ],
-        sprite: 'app/img/sprite/**/*.*',
-        fonts: 'app/fonts/**/*.*'
+        sprite: 'app/img/sprite/**/*.*', //watch all files in the child directories in the 'sprite' folder
+        fonts: 'app/fonts/**/*.*' //watch all files in the child directories in the 'fonts' folder
     }
 };
 
-gulp.task('html', function() {
+gulp.task('html', function() { //create task 'html', that deploy html files from the templates
     console.log("-- gulp is running task 'html'");
-    return gulp.src(path.app.html) //Выберем файлы по нужному пути
-        .on('error', console.log)
-        .pipe(include())
-        .pipe(gulp.dest(path.dist.html)); //Выгружаем их в папку dist
-
+    return gulp.src(path.app.html) //take all source html files (templates or full, no matter)
+        .on('error', console.log) //if an error write log to console
+        .pipe(include()) //run plugin that merge templates
+        .pipe(gulp.dest(path.dist.html)) //save all merged files to distributive
+        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
 });
 
-gulp.task('sass', function() { // Создаем таск "sass"
+gulp.task('sass', function() { //create task 'sass', that deploy sass files from the partials and mixins and finaly compile to css
     console.log("-- gulp is running task 'sass'");
-    return gulp.src(path.app.scss) // Берем источник
+    return gulp.src(path.app.scss) //take main scss file
         .on('error', console.log)
-        .pipe(include())
-        .pipe(sass()) // Преобразуем Sass в CSS посредством gulp-sass
-        .pipe(autoprefixer([
+        .pipe(include()) //run plugin that merge mixins and partials to main file
+        .pipe(sass()) //compile css file from sass
+        .pipe(autoprefixer([ //add prefixes
             'Android 2.3',
             'Android >= 4',
             'Chrome >= 20',
@@ -77,56 +83,62 @@ gulp.task('sass', function() { // Создаем таск "sass"
             'Opera >= 12',
             'Safari >= 6'
         ]))
-        .pipe(gulp.dest(path.dist.css)) // Выгружаем результаты в папку dist
-        .pipe(browserSync.reload({ stream: true }));
+        .pipe(gulp.dest(path.dist.css)) //save merged main file to distributive
+        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
 });
 
-gulp.task("js", function() {
+gulp.task("js", function() { //create task 'js', that deploy js files from the partials and mixins 
     console.log("-- gulp is running task 'js'");
-    return gulp.src(path.app.js)
+    return gulp.src(path.app.js) //take main js file
         .on('error', console.log)
-        .pipe(include())
-        .pipe(gulp.dest(path.dist.js)); // Выгружаем результаты в папку dist
+        .pipe(include()) //run plugin that merge partials to main file
+        .pipe(gulp.dest(path.dist.js)) //save merged main file to distributive
+        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
 });
 
-gulp.task('sprite', function() {
-    console.log("-- gulp is running task 'sprite'");
-    var spriteData = gulp.src(path.app.sprite) // путь, откуда берем картинки для спрайта
-        .pipe(spritesmith({
-            imgName: 'sprite.png',
-            cssFormat: 'scss',
-            cssName: 'sprite.scss',
-        }));
-    spriteData.img.pipe(gulp.dest(path.dist.img)); // путь, куда сохраняем спрайт
-    spriteData.css.pipe(gulp.dest(path.dist.sprite_css)); // путь, куда сохраняем стили
-});
-
-gulp.task('img', function() {
+gulp.task('img', function() { //create task 'img', that transfer images from application to distributive
     console.log("-- gulp is running task 'img'");
-    gulp.src(path.app.img)
-        .pipe(gulp.dest(path.dist.img)); //Перебрасываем все картинки в dist
+    gulp.src(path.app.img) //take all files in the 'img' folder except sprite folder
+        .pipe(gulp.dest(path.dist.img)) //save they to distributive
+        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
 });
 
-gulp.task('fonts', function() {
+gulp.task('sprite', function() { //create task 'sprite', that generate one image sprite from many image files
+    console.log("-- gulp is running task 'sprite'");
+    var spriteData = gulp.src(path.app.sprite) //take all files in the 'sprite' 
+        .pipe(spritesmith({ //using the spritesmith plugin
+            imgName: 'sprite.png', //sprite image file name
+            cssFormat: 'scss', //format of the sprite stylesheet
+            cssName: '_sprite.scss', //sprite stylesheet file name 
+        }));
+    spriteData.img
+        .pipe(gulp.dest(path.dist.img)) //save generated sprite image to distributive
+        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
+    spriteData.css
+        .pipe(gulp.dest(path.dist.sprite_css)) //save sprite stylesheet to distributive
+        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
+});
+
+gulp.task('fonts', function() { //create task 'fonts', that transfer fonts from application to distributive
     console.log("-- gulp is running task 'fonts'");
-    gulp.src(path.app.fonts)
-        .pipe(gulp.dest(path.dist.fonts)); //Перебрасываем все шрифты в dist
+    gulp.src(path.app.fonts) //take all files in the 'fonts' folder
+        .pipe(gulp.dest(path.dist.fonts)); //save they to distributive
 });
 
-gulp.task('browser-sync', function() { // Создаем таск browser-sync
-    browserSync({ // Выполняем browser Sync
-        server: { // Определяем параметры сервера
-            baseDir: 'dist' // Директория для сервера - app
+gulp.task('clean', function() { //create task 'clean' which cleans distributive folder before compilation
+    return del.sync('dist'); //delete the dist folder
+});
+
+gulp.task('browser-sync', function() { //create task 'browser-sync' which starts the server
+    browserSync({ //start browser Sync
+        server: { //define server parameters
+            baseDir: 'dist' //server folder - distributive
         },
-        notify: false // Отключаем уведомления
+        notify: false //disable notifications
     });
 });
 
-gulp.task('clean', function() {
-    return del.sync('dist'); // Удаляем папку dist перед сборкой
-});
-
-gulp.task('build', [
+gulp.task('build', [ //create task 'build' which compile project to distributive
     'clean',
     'browser-sync',
     'html',
@@ -138,34 +150,34 @@ gulp.task('build', [
 ]);
 
 
-gulp.task('watch', ['build'], function() {
-    gulp.watch(path.watch.img, ['img']); // Наблюдение за картинками в папке img
-    gulp.watch(path.watch.sprite, ['sprite']); // Наблюдение за картинками в папке img_sprite
-    gulp.watch(path.watch.scss, ['sass']); // Наблюдение за scss файлами в папке scss
-    gulp.watch(path.watch.html, ['html']); // Наблюдение за HTML файлами в корне проекта
-    gulp.watch(path.watch.js, ['js']); // Наблюдение за JS файлами в папке js
-    gulp.watch(path.watch.fonts, ['fonts']); // Наблюдение за fonts файлами в папке fonts
+gulp.task('watch', ['build'], function() { //create MAIN TASK 'watch' which compile project to distributive and watching out for changes in real time. Compile fast but there is no filesize optimization
+    gulp.watch(path.watch.img, ['img']);
+    gulp.watch(path.watch.sprite, ['sprite']);
+    gulp.watch(path.watch.scss, ['sass']);
+    gulp.watch(path.watch.html, ['html']);
+    gulp.watch(path.watch.js, ['js']);
+    gulp.watch(path.watch.fonts, ['fonts']);
 });
 
-gulp.task('final', ['build'], function() {
+gulp.task('final', ['build'], function() { //create MAIN TASK 'final' which compile project to distributive, compress all images, js and css files, and also removes unused classes from stylesheet 
     console.log("-- gulp is running task 'minimize:img'");
-    gulp.src(path.dist.img + '**/*.*') //Выберем наши картинки в dist
-        .pipe(imagemin({ //Сожмем их
+    gulp.src(path.dist.img + '**/*.*') //take all image files from distributive
+        .pipe(imagemin({ //compress images
             progressive: true,
             svgoPlugins: [{ removeViewBox: false }],
             use: [pngquant()],
             interlaced: true
         }))
-        .pipe(gulp.dest(path.dist.img)); //И бросим туда же
+        .pipe(gulp.dest(path.dist.img)); //save they to distributive
 
     console.log("-- gulp is running task 'minimize:css'");
-    gulp.src(path.dist.css + '**/*.*')
-        .pipe(uncss({ html: [path.dist.html + '**/*.html'] }))
-        .pipe(minifycss()) // Сжимаем CSS 
-        .pipe(gulp.dest(path.dist.css)) //И бросим туда же
+    gulp.src(path.dist.css + '**/*.*') //take css files from distributive
+        .pipe(uncss({ html: [path.dist.html + '**/*.html'] })) //this plugin see all used stylesheet classes in html files and also removes unused classes from css
+        .pipe(minifycss()) //compress css
+        .pipe(gulp.dest(path.dist.css)) //save to distributive
 
-    console.log("-- gulp is running task 'minimize:js'");
+    console.log("-- gulp is running task 'minimize:js'"); //take js files from distributive
     gulp.src(path.dist.js + '**/*.*')
-        .pipe(uglify()) // Сжимаем JS файл
-        .pipe(gulp.dest(path.dist.js)); // Выгружаем результаты назад в папку dist
+        .pipe(uglify()) // compress js
+        .pipe(gulp.dest(path.dist.js)); //save to distributive
 });
