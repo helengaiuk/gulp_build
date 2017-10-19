@@ -1,6 +1,6 @@
 Gulp Boilerplate for generic CSS/HTML/JS development
 =============
-<a href="http://helengaiuk.github.io" target="_blank">helengaiuk.github.io</a> gulp boilerplate.
+<a href="http://helengaiuk.github.io" target="_blank">@helengaiuk</a> gulp boilerplate.
 
 Structure
 =============

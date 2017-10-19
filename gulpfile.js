@@ -115,14 +115,14 @@ gulp.task('sprite', function() { //create task 'sprite', that generate one image
         .pipe(gulp.dest(path.dist.img)) //save generated sprite image to distributive
         .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
     spriteData.css
-        .pipe(gulp.dest(path.dist.sprite_css)) //save sprite stylesheet to distributive
-        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
+        .pipe(gulp.dest(path.dist.sprite_css)); //save sprite stylesheet to distributive
 });
 
 gulp.task('fonts', function() { //create task 'fonts', that transfer fonts from application to distributive
     console.log("-- gulp is running task 'fonts'");
     gulp.src(path.app.fonts) //take all files in the 'fonts' folder
-        .pipe(gulp.dest(path.dist.fonts)); //save they to distributive
+        .pipe(gulp.dest(path.dist.fonts)) //save they to distributive
+        .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
 });
 
 gulp.task('clean', function() { //create task 'clean' which cleans distributive folder before compilation
@@ -156,7 +156,6 @@ gulp.task('watch', ['build'], function() { //create MAIN TASK 'watch' which comp
     gulp.watch(path.watch.scss, ['sass']);
     gulp.watch(path.watch.html, ['html']);
     gulp.watch(path.watch.js, ['js']);
-    gulp.watch(path.watch.fonts, ['fonts']);
 });
 
 gulp.task('final', ['build'], function() { //create MAIN TASK 'final' which compile project to distributive, compress all images, js and css files, and also removes unused classes from stylesheet 

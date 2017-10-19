@@ -1,0 +1,134 @@
+// SCSS variables are information about icon's compiled state, stored under its original file name
+//
+// .icon-home {
+//   width: $icon-home-width;
+// }
+//
+// The large array-like variables contain all information about a single icon
+// $icon-home: x y offset_x offset_y width height total_width total_height image_path;
+//
+// At the bottom of this section, we provide information about the spritesheet itself
+// $spritesheet: width height image $spritesheet-sprites;
+$-h-t-m-l5-logo-512-name: 'HTML5_Logo_512';
+$-h-t-m-l5-logo-512-x: 800px;
+$-h-t-m-l5-logo-512-y: 0px;
+$-h-t-m-l5-logo-512-offset-x: -800px;
+$-h-t-m-l5-logo-512-offset-y: 0px;
+$-h-t-m-l5-logo-512-width: 512px;
+$-h-t-m-l5-logo-512-height: 512px;
+$-h-t-m-l5-logo-512-total-width: 1740px;
+$-h-t-m-l5-logo-512-total-height: 1100px;
+$-h-t-m-l5-logo-512-image: 'sprite.png';
+$-h-t-m-l5-logo-512: (800px, 0px, -800px, 0px, 512px, 512px, 1740px, 1100px, 'sprite.png', 'HTML5_Logo_512', );
+$css3-logo-name: 'css3-logo';
+$css3-logo-x: 1312px;
+$css3-logo-y: 0px;
+$css3-logo-offset-x: -1312px;
+$css3-logo-offset-y: 0px;
+$css3-logo-width: 428px;
+$css3-logo-height: 600px;
+$css3-logo-total-width: 1740px;
+$css3-logo-total-height: 1100px;
+$css3-logo-image: 'sprite.png';
+$css3-logo: (1312px, 0px, -1312px, 0px, 428px, 600px, 1740px, 1100px, 'sprite.png', 'css3-logo', );
+$gulp-name: 'gulp';
+$gulp-x: 800px;
+$gulp-y: 512px;
+$gulp-offset-x: -800px;
+$gulp-offset-y: -512px;
+$gulp-width: 257px;
+$gulp-height: 257px;
+$gulp-total-width: 1740px;
+$gulp-total-height: 1100px;
+$gulp-image: 'sprite.png';
+$gulp: (800px, 512px, -800px, -512px, 257px, 257px, 1740px, 1100px, 'sprite.png', 'gulp', );
+$j-qurery-name: 'jQurery';
+$j-qurery-x: 0px;
+$j-qurery-y: 0px;
+$j-qurery-offset-x: 0px;
+$j-qurery-offset-y: 0px;
+$j-qurery-width: 800px;
+$j-qurery-height: 800px;
+$j-qurery-total-width: 1740px;
+$j-qurery-total-height: 1100px;
+$j-qurery-image: 'sprite.png';
+$j-qurery: (0px, 0px, 0px, 0px, 800px, 800px, 1740px, 1100px, 'sprite.png', 'jQurery', );
+$javascript-logo-e967-e87-d74-seeklogo-com-name: 'javascript-logo-E967E87D74-seeklogo.com';
+$javascript-logo-e967-e87-d74-seeklogo-com-x: 0px;
+$javascript-logo-e967-e87-d74-seeklogo-com-y: 800px;
+$javascript-logo-e967-e87-d74-seeklogo-com-offset-x: 0px;
+$javascript-logo-e967-e87-d74-seeklogo-com-offset-y: -800px;
+$javascript-logo-e967-e87-d74-seeklogo-com-width: 213px;
+$javascript-logo-e967-e87-d74-seeklogo-com-height: 300px;
+$javascript-logo-e967-e87-d74-seeklogo-com-total-width: 1740px;
+$javascript-logo-e967-e87-d74-seeklogo-com-total-height: 1100px;
+$javascript-logo-e967-e87-d74-seeklogo-com-image: 'sprite.png';
+$javascript-logo-e967-e87-d74-seeklogo-com: (0px, 800px, 0px, -800px, 213px, 300px, 1740px, 1100px, 'sprite.png', 'javascript-logo-E967E87D74-seeklogo.com', );
+$spritesheet-width: 1740px;
+$spritesheet-height: 1100px;
+$spritesheet-image: 'sprite.png';
+$spritesheet-sprites: ($-h-t-m-l5-logo-512, $css3-logo, $gulp, $j-qurery, $javascript-logo-e967-e87-d74-seeklogo-com, );
+$spritesheet: (1740px, 1100px, 'sprite.png', $spritesheet-sprites, );
+
+// The provided mixins are intended to be used with the array-like variables
+//
+// .icon-home {
+//   @include sprite-width($icon-home);
+// }
+//
+// .icon-email {
+//   @include sprite($icon-email);
+// }
+//
+// Example usage in HTML:
+//
+// `display: block` sprite:
+// <div class="icon-home"></div>
+//
+// To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+//
+// // CSS
+// .icon {
+//   display: inline-block;
+// }
+//
+// // HTML
+// <i class="icon icon-home"></i>
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+// The `sprites` mixin generates identical output to the CSS template
+//   but can be overridden inside of SCSS
+//
+// @include sprites($spritesheet-sprites);
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}
