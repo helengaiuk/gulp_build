@@ -26,8 +26,7 @@ Structure
 index.html       // main html file
 ```
 
-How write `html` code
-=============
+### How write `html` code
 
 We have main html file
 `/app/index.html`
@@ -45,8 +44,7 @@ We have html template folder with templates (like header or footer ect.)
 `/app/_template/footer.html` 
 
 
-How create `sprite` image
-=============
+### How create `sprite` image
 
 `app/img/sprite` are joined into sprite, which could be used in Sass like this:
 ```
@@ -54,8 +52,8 @@ How create `sprite` image
     +s(png_name)
 ```
 
-Naming
-=============
+### Naming
+
 I use BEM naming, meaning `.block` for independent block. `.block__element` for elements inside that block. And `.block_modification` for modification of the block.
 
 It's noce to name layout blocks with `.l-*` prefixes. So you know it's layout.
@@ -64,6 +62,6 @@ States of the blocks use prefix `.is-*`. `.is-running`, `.is-hidden`, `.is-open`
 
 For javascript hooks we use prefix `.js-*`.
 
-You are welcome
-=============
+### You are welcome
+
 Have fun using it, or borrowing some parts. In case of issues or ideas just create them on github. Or write me at <a href="mailto:helengaiuk@qp-link.com">helengaiuk@qp-link.com</a>.
