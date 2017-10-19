@@ -11,19 +11,19 @@ Structure
 ### Structure of `app` folder:
 
 ```
-| _template             (in this folder we have html template files like footer.html ect)
-| fonts                 (in this folder we put font files (in folders or into root))
-| img                   (in root we put images)
-|--- sprite             (in this folder we put images to generate sprite)
+| _template      // in this folder we have html template files like footer.html ect
+| fonts          // in this folder we put font files (in folders or into root)
+| img            // in root we put images
+|--- sprite      // in this folder we put images to generate sprite
 | js
-|--- libs               (put js libraries into this folder)
-|--- partials           (put your js code here)
-|--- main.js            (there is main file that connects all other js filed. do not edit it)
+|--- libs        // put js libraries into this folder
+|--- partials    // put your js code here)
+|--- main.js     // there is main file that connects all other js filed. do not edit it
 | scss 
-|--- mixins             (put scss mixins into this folder)
-|--- partials           (put your scss code here)
-|--- main.scss          (there is main file that connects all other scss filed. do not edit it)
-index.html              (main html file)
+|--- mixins      // put scss mixins into this folder
+|--- partials    // put your scss code here
+|--- main.scss   // there is main file that connects all other scss filed. do not edit it
+index.html       // main html file
 ```
 
 How write `html` code
