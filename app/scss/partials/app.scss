@@ -1,4 +1,11 @@
- /* autoprefixer: on */
- 
- body {}
- /* autoprefixer: off */
+// if you have _sprite.scss file - uncomment whis string //   /*=include partials/_sprite.*css */
+// if you have and retina sprite too - uncomment whis string //   @include retina-sprites($retina-groups);
+
+/* autoprefixer: on */
+
+body {
+    color: #333;
+}
+
+
+/* autoprefixer: off */

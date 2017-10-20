@@ -1,0 +1,250 @@
+// SCSS variables are information about icon's compiled state, stored under its original file name
+//
+// .icon-home {
+//   width: $icon-home-width;
+// }
+//
+// The large array-like variables contain all information about a single icon
+// $icon-home: x y offset_x offset_y width height total_width total_height image_path;
+//
+// At the bottom of this section, we provide information about the spritesheet itself
+// $spritesheet: width height image $spritesheet-sprites;
+$-h-t-m-l5-logo-512-name: 'HTML5_Logo_512';
+$-h-t-m-l5-logo-512-x: 0px;
+$-h-t-m-l5-logo-512-y: 150px;
+$-h-t-m-l5-logo-512-offset-x: 0px;
+$-h-t-m-l5-logo-512-offset-y: -150px;
+$-h-t-m-l5-logo-512-width: 150px;
+$-h-t-m-l5-logo-512-height: 150px;
+$-h-t-m-l5-logo-512-total-width: 450px;
+$-h-t-m-l5-logo-512-total-height: 300px;
+$-h-t-m-l5-logo-512-image: 'sprite.png';
+$-h-t-m-l5-logo-512: (0px, 150px, 0px, -150px, 150px, 150px, 450px, 300px, 'sprite.png', 'HTML5_Logo_512', );
+$css3-logo-name: 'css3-logo';
+$css3-logo-x: 0px;
+$css3-logo-y: 0px;
+$css3-logo-offset-x: 0px;
+$css3-logo-offset-y: 0px;
+$css3-logo-width: 150px;
+$css3-logo-height: 150px;
+$css3-logo-total-width: 450px;
+$css3-logo-total-height: 300px;
+$css3-logo-image: 'sprite.png';
+$css3-logo: (0px, 0px, 0px, 0px, 150px, 150px, 450px, 300px, 'sprite.png', 'css3-logo', );
+$gulp-name: 'gulp';
+$gulp-x: 150px;
+$gulp-y: 0px;
+$gulp-offset-x: -150px;
+$gulp-offset-y: 0px;
+$gulp-width: 150px;
+$gulp-height: 150px;
+$gulp-total-width: 450px;
+$gulp-total-height: 300px;
+$gulp-image: 'sprite.png';
+$gulp: (150px, 0px, -150px, 0px, 150px, 150px, 450px, 300px, 'sprite.png', 'gulp', );
+$j-qurery-name: 'jQurery';
+$j-qurery-x: 300px;
+$j-qurery-y: 0px;
+$j-qurery-offset-x: -300px;
+$j-qurery-offset-y: 0px;
+$j-qurery-width: 150px;
+$j-qurery-height: 150px;
+$j-qurery-total-width: 450px;
+$j-qurery-total-height: 300px;
+$j-qurery-image: 'sprite.png';
+$j-qurery: (300px, 0px, -300px, 0px, 150px, 150px, 450px, 300px, 'sprite.png', 'jQurery', );
+$javascript-logo-e967-e87-d74-name: 'javascript-logo-E967E87D74';
+$javascript-logo-e967-e87-d74-x: 150px;
+$javascript-logo-e967-e87-d74-y: 150px;
+$javascript-logo-e967-e87-d74-offset-x: -150px;
+$javascript-logo-e967-e87-d74-offset-y: -150px;
+$javascript-logo-e967-e87-d74-width: 150px;
+$javascript-logo-e967-e87-d74-height: 150px;
+$javascript-logo-e967-e87-d74-total-width: 450px;
+$javascript-logo-e967-e87-d74-total-height: 300px;
+$javascript-logo-e967-e87-d74-image: 'sprite.png';
+$javascript-logo-e967-e87-d74: (150px, 150px, -150px, -150px, 150px, 150px, 450px, 300px, 'sprite.png', 'javascript-logo-E967E87D74', );
+$-h-t-m-l5-logo-512-2x-name: 'HTML5_Logo_512@2x';
+$-h-t-m-l5-logo-512-2x-x: 0px;
+$-h-t-m-l5-logo-512-2x-y: 300px;
+$-h-t-m-l5-logo-512-2x-offset-x: 0px;
+$-h-t-m-l5-logo-512-2x-offset-y: -300px;
+$-h-t-m-l5-logo-512-2x-width: 300px;
+$-h-t-m-l5-logo-512-2x-height: 300px;
+$-h-t-m-l5-logo-512-2x-total-width: 900px;
+$-h-t-m-l5-logo-512-2x-total-height: 600px;
+$-h-t-m-l5-logo-512-2x-image: 'sprite@2x.png';
+$-h-t-m-l5-logo-512-2x: (0px, 300px, 0px, -300px, 300px, 300px, 900px, 600px, 'sprite@2x.png', 'HTML5_Logo_512@2x', );
+$css3-logo-2x-name: 'css3-logo@2x';
+$css3-logo-2x-x: 0px;
+$css3-logo-2x-y: 0px;
+$css3-logo-2x-offset-x: 0px;
+$css3-logo-2x-offset-y: 0px;
+$css3-logo-2x-width: 300px;
+$css3-logo-2x-height: 300px;
+$css3-logo-2x-total-width: 900px;
+$css3-logo-2x-total-height: 600px;
+$css3-logo-2x-image: 'sprite@2x.png';
+$css3-logo-2x: (0px, 0px, 0px, 0px, 300px, 300px, 900px, 600px, 'sprite@2x.png', 'css3-logo@2x', );
+$gulp-2x-name: 'gulp@2x';
+$gulp-2x-x: 300px;
+$gulp-2x-y: 0px;
+$gulp-2x-offset-x: -300px;
+$gulp-2x-offset-y: 0px;
+$gulp-2x-width: 300px;
+$gulp-2x-height: 300px;
+$gulp-2x-total-width: 900px;
+$gulp-2x-total-height: 600px;
+$gulp-2x-image: 'sprite@2x.png';
+$gulp-2x: (300px, 0px, -300px, 0px, 300px, 300px, 900px, 600px, 'sprite@2x.png', 'gulp@2x', );
+$j-qurery-2x-name: 'jQurery@2x';
+$j-qurery-2x-x: 600px;
+$j-qurery-2x-y: 0px;
+$j-qurery-2x-offset-x: -600px;
+$j-qurery-2x-offset-y: 0px;
+$j-qurery-2x-width: 300px;
+$j-qurery-2x-height: 300px;
+$j-qurery-2x-total-width: 900px;
+$j-qurery-2x-total-height: 600px;
+$j-qurery-2x-image: 'sprite@2x.png';
+$j-qurery-2x: (600px, 0px, -600px, 0px, 300px, 300px, 900px, 600px, 'sprite@2x.png', 'jQurery@2x', );
+$javascript-logo-e967-e87-d74-2x-name: 'javascript-logo-E967E87D74@2x';
+$javascript-logo-e967-e87-d74-2x-x: 300px;
+$javascript-logo-e967-e87-d74-2x-y: 300px;
+$javascript-logo-e967-e87-d74-2x-offset-x: -300px;
+$javascript-logo-e967-e87-d74-2x-offset-y: -300px;
+$javascript-logo-e967-e87-d74-2x-width: 300px;
+$javascript-logo-e967-e87-d74-2x-height: 300px;
+$javascript-logo-e967-e87-d74-2x-total-width: 900px;
+$javascript-logo-e967-e87-d74-2x-total-height: 600px;
+$javascript-logo-e967-e87-d74-2x-image: 'sprite@2x.png';
+$javascript-logo-e967-e87-d74-2x: (300px, 300px, -300px, -300px, 300px, 300px, 900px, 600px, 'sprite@2x.png', 'javascript-logo-E967E87D74@2x', );
+$spritesheet-width: 450px;
+$spritesheet-height: 300px;
+$spritesheet-image: 'sprite.png';
+$spritesheet-sprites: ($-h-t-m-l5-logo-512, $css3-logo, $gulp, $j-qurery, $javascript-logo-e967-e87-d74, );
+$spritesheet: (450px, 300px, 'sprite.png', $spritesheet-sprites, );
+$retina-spritesheet-width: 900px;
+$retina-spritesheet-height: 600px;
+$retina-spritesheet-image: 'sprite@2x.png';
+$retina-spritesheet-sprites: ($-h-t-m-l5-logo-512-2x, $css3-logo-2x, $gulp-2x, $j-qurery-2x, $javascript-logo-e967-e87-d74-2x, );
+$retina-spritesheet: (900px, 600px, 'sprite@2x.png', $retina-spritesheet-sprites, );
+
+// These "retina group" variables are mappings for the naming and pairing of normal and retina sprites.
+//
+// The list formatted variables are intended for mixins like `retina-sprite` and `retina-sprites`.
+$-h-t-m-l5-logo-512-group-name: 'HTML5_Logo_512';
+$-h-t-m-l5-logo-512-group: ('HTML5_Logo_512', $-h-t-m-l5-logo-512, $-h-t-m-l5-logo-512-2x, );
+$css3-logo-group-name: 'css3-logo';
+$css3-logo-group: ('css3-logo', $css3-logo, $css3-logo-2x, );
+$gulp-group-name: 'gulp';
+$gulp-group: ('gulp', $gulp, $gulp-2x, );
+$j-qurery-group-name: 'jQurery';
+$j-qurery-group: ('jQurery', $j-qurery, $j-qurery-2x, );
+$javascript-logo-e967-e87-d74-group-name: 'javascript-logo-E967E87D74';
+$javascript-logo-e967-e87-d74-group: ('javascript-logo-E967E87D74', $javascript-logo-e967-e87-d74, $javascript-logo-e967-e87-d74-2x, );
+$retina-groups: ($-h-t-m-l5-logo-512-group, $css3-logo-group, $gulp-group, $j-qurery-group, $javascript-logo-e967-e87-d74-group, );
+
+// The provided mixins are intended to be used with the array-like variables
+//
+// .icon-home {
+//   @include sprite-width($icon-home);
+// }
+//
+// .icon-email {
+//   @include sprite($icon-email);
+// }
+//
+// Example usage in HTML:
+//
+// `display: block` sprite:
+// <div class="icon-home"></div>
+//
+// To change `display` (e.g. `display: inline-block;`), we suggest using a common CSS class:
+//
+// // CSS
+// .icon {
+//   display: inline-block;
+// }
+//
+// // HTML
+// <i class="icon icon-home"></i>
+@mixin sprite-width($sprite) {
+  width: nth($sprite, 5);
+}
+
+@mixin sprite-height($sprite) {
+  height: nth($sprite, 6);
+}
+
+@mixin sprite-position($sprite) {
+  $sprite-offset-x: nth($sprite, 3);
+  $sprite-offset-y: nth($sprite, 4);
+  background-position: $sprite-offset-x  $sprite-offset-y;
+}
+
+@mixin sprite-image($sprite) {
+  $sprite-image: nth($sprite, 9);
+  background-image: url(#{$sprite-image});
+}
+
+@mixin sprite($sprite) {
+  @include sprite-image($sprite);
+  @include sprite-position($sprite);
+  @include sprite-width($sprite);
+  @include sprite-height($sprite);
+}
+
+// The `retina-sprite` mixin sets up rules and a media query for a sprite/retina sprite.
+//   It should be used with a "retina group" variable.
+//
+// The media query is from CSS Tricks: https://css-tricks.com/snippets/css/retina-display-media-query/
+//
+// $icon-home-group: ('icon-home', $icon-home, $icon-home-2x, );
+//
+// .icon-home {
+//   @include retina-sprite($icon-home-group);
+// }
+@mixin sprite-background-size($sprite) {
+  $sprite-total-width: nth($sprite, 7);
+  $sprite-total-height: nth($sprite, 8);
+  background-size: $sprite-total-width $sprite-total-height;
+}
+
+@mixin retina-sprite($retina-group) {
+  $normal-sprite: nth($retina-group, 2);
+  $retina-sprite: nth($retina-group, 3);
+  @include sprite($normal-sprite);
+
+  @media (-webkit-min-device-pixel-ratio: 2),
+         (min-resolution: 192dpi) {
+    @include sprite-image($retina-sprite);
+    @include sprite-background-size($normal-sprite);
+  }
+}
+
+// The `sprites` mixin generates identical output to the CSS template
+//   but can be overridden inside of SCSS
+//
+// @include sprites($spritesheet-sprites);
+@mixin sprites($sprites) {
+  @each $sprite in $sprites {
+    $sprite-name: nth($sprite, 10);
+    .#{$sprite-name} {
+      @include sprite($sprite);
+    }
+  }
+}
+
+// The `retina-sprites` mixin generates a CSS rule and media query for retina groups
+//   This yields the same output as CSS retina template but can be overridden in SCSS
+//
+// @include retina-sprites($retina-groups);
+@mixin retina-sprites($retina-groups) {
+  @each $retina-group in $retina-groups {
+    $sprite-name: nth($retina-group, 1);
+    .#{$sprite-name} {
+      @include retina-sprite($retina-group);
+    }
+  }
+}

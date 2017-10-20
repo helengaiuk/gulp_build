@@ -28,7 +28,7 @@ var path = {
         js: 'dist/js/',
         css: 'dist/css/',
         img: 'dist/img/',
-        sprite_css: 'app/scss/mixins/',
+        sprite_css: 'app/scss/partials/',
         fonts: 'dist/fonts/'
     },
     app: { //folder of working files of the project - application
@@ -42,13 +42,17 @@ var path = {
             'app/img/**/*.*', //include all files in the child directories in the 'img' folder
             '!app/img/sprite/*.*' //exclude 'sprite' folder
         ],
-        sprite: 'app/img/sprite/**/*.*', //include all files in the child directories in the 'sprite' folder
+        sprite: 'app/img/sprite/**/*.*', //include all image files in the child directories in the 'sprite' folder
+        sprite2x: 'app/img/sprite/**/*2x.*', //include all retina image files in the child directories in the 'sprite' folder with this mask 
         fonts: 'app/fonts/**/*.*' //include all files in the child directories in the 'fonts' folder
     },
     watch: { //what files we want to watch
         html: 'app/**/*.html', //watch all html files in all folders
         js: 'app/js/**/*.js', //watch all files in the child directories in the 'js' folder
-        scss: 'app/scss/**/*.scss', //watch all scss files in the child directories in the 'scss' folder
+        scss: [
+            'app/scss/**/*.scss', //watch all scss files in the child directories in the 'scss' folder
+            '!app/scss/**/_*.scss' //except 'mixins' folder
+        ],
         img: [
             'app/img/**/*.*', //watch all files in the child directories in the 'img' folder
             '!app/img/sprite/*.*' //except 'sprite' folder
@@ -107,8 +111,10 @@ gulp.task('sprite', function() { //create task 'sprite', that generate one image
     console.log("-- gulp is running task 'sprite'");
     var spriteData = gulp.src(path.app.sprite) //take all files in the 'sprite' 
         .pipe(spritesmith({ //using the spritesmith plugin
+            retinaSrcFilter: path.app.sprite2x, //filter for retina images
             imgName: 'sprite.png', //sprite image file name
-            cssFormat: 'scss', //format of the sprite stylesheet
+            retinaImgName: 'sprite@2x.png', //retina sprite image file name
+            //cssFormat: 'scss', //format of the sprite stylesheet
             cssName: '_sprite.scss', //sprite stylesheet file name 
         }));
     spriteData.img
