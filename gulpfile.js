@@ -19,8 +19,11 @@ var gulp = require('gulp'), // Connect Gulp
     imagemin = require('gulp-imagemin'), // Image Compression
     pngquant = require('imagemin-pngquant'), // Addition to the previous plugin with the ability to compress png
     spritesmith = require('gulp.spritesmith'), // Creating sprites
+    svgSprite = require("gulp-svg-sprites"), // Creating svg sprites
+    svgmin = require('gulp-svgmin'), // compress svg sprites
     uncss = require('gulp-uncss'), //Removes unused in project css code 
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
+    fs = require('fs'); //node filesystem
 
 var path = {
     dist: { //folder of the finished project - distributive
@@ -29,6 +32,8 @@ var path = {
         css: 'dist/css/',
         img: 'dist/img/',
         sprite_css: 'app/scss/partials/',
+        sprite_svg: 'dist/img/sprite.svg',
+        sprite_svg_css: 'app/scss/partials/_sprite_svg.scss',
         fonts: 'dist/fonts/'
     },
     app: { //folder of working files of the project - application
@@ -42,8 +47,12 @@ var path = {
             'app/img/**/*.*', //include all files in the child directories in the 'img' folder
             '!app/img/sprite/*.*' //exclude 'sprite' folder
         ],
-        sprite: 'app/img/sprite/**/*.*', //include all image files in the child directories in the 'sprite' folder
-        sprite2x: 'app/img/sprite/**/*2x.*', //include all retina image files in the child directories in the 'sprite' folder with this mask 
+        sprite: [
+            'app/img/sprite/**/*.*', //include all image files in the child directories in the 'sprite' folder
+            '!app/img/sprite/**/*.svg' //exclude 'svg' files
+        ],
+        sprite2x: 'app/img/sprite/**/*@2x.*', //include all retina image files in the child directories in the 'sprite' folder with this mask 
+        sprite_svg: 'app/img/sprite/**/*.svg', //include all svg image files in the 'sprite' folder
         fonts: 'app/fonts/**/*.*' //include all files in the child directories in the 'fonts' folder
     },
     watch: { //what files we want to watch
@@ -51,13 +60,17 @@ var path = {
         js: 'app/js/**/*.js', //watch all files in the child directories in the 'js' folder
         scss: [
             'app/scss/**/*.scss', //watch all scss files in the child directories in the 'scss' folder
-            '!app/scss/**/_*.scss' //except 'mixins' folder
+            '!app/scss/**/_*.scss' //except 'mixins' files
         ],
         img: [
             'app/img/**/*.*', //watch all files in the child directories in the 'img' folder
-            '!app/img/sprite/*.*' //except 'sprite' folder
+            '!app/img/sprite/**/*.*' //except 'sprite' folder
         ],
-        sprite: 'app/img/sprite/**/*.*', //watch all files in the child directories in the 'sprite' folder
+        sprite: [
+            'app/img/sprite/**/*.*' //watch all files in the child directories in the 'sprite' folder
+            //'!app/img/sprite/**/*.svg' //except 'svg' files
+        ],
+        //sprite_svg: 'app/img/sprite/**/*.svg', //watch all svg files in the 'sprite' folder
         fonts: 'app/fonts/**/*.*' //watch all files in the child directories in the 'fonts' folder
     }
 };
@@ -107,8 +120,8 @@ gulp.task('img', function() { //create task 'img', that transfer images from app
         .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
 });
 
-gulp.task('sprite', function() { //create task 'sprite', that generate one image sprite from many image files
-    console.log("-- gulp is running task 'sprite'");
+gulp.task('sprite:img', function() { //create task 'sprite', that generate one image sprite from many image files
+    console.log("-- gulp is running task 'sprite:img'");
     var spriteData = gulp.src(path.app.sprite) //take all files in the 'sprite' 
         .pipe(spritesmith({ //using the spritesmith plugin
             retinaSrcFilter: path.app.sprite2x, //filter for retina images
@@ -122,7 +135,25 @@ gulp.task('sprite', function() { //create task 'sprite', that generate one image
         .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
     spriteData.css
         .pipe(gulp.dest(path.dist.sprite_css)); //save sprite stylesheet to distributive
+
 });
+
+gulp.task('sprite:svg', function() {
+    console.log("-- gulp is running task 'sprite:svg'");
+    var test = gulp.src(path.dist.sprite_svg);
+    gulp.src(path.app.sprite_svg)
+        .pipe(svgSprite({
+            templates: { scss: true },
+            cssFile: "../" + path.dist.sprite_svg_css,
+            svg: {
+                sprite: "../" + path.dist.sprite_svg
+            },
+            preview: false
+        }))
+        .pipe(gulp.dest(path.dist.html));
+});
+
+gulp.task('sprite', ['sprite:img', 'sprite:svg']);
 
 gulp.task('fonts', function() { //create task 'fonts', that transfer fonts from application to distributive
     console.log("-- gulp is running task 'fonts'");
@@ -132,7 +163,8 @@ gulp.task('fonts', function() { //create task 'fonts', that transfer fonts from 
 });
 
 gulp.task('clean', function() { //create task 'clean' which cleans distributive folder before compilation
-    return del.sync('dist'); //delete the dist folder
+    del.sync('dist'),
+        del.sync(path.dist.sprite_css + "*sprite*.*"); //delete the dist folder    
 });
 
 gulp.task('browser-sync', function() { //create task 'browser-sync' which starts the server
@@ -173,6 +205,11 @@ gulp.task('final', ['build'], function() { //create MAIN TASK 'final' which comp
             use: [pngquant()],
             interlaced: true
         }))
+        .pipe(gulp.dest(path.dist.img)); //save they to distributive
+
+    console.log("-- gulp is running task 'minimize:svg'");
+    gulp.src(path.dist.img + '**/*.svg') //take all svg files from distributive
+        .pipe(svgmin()) //compress svg images
         .pipe(gulp.dest(path.dist.img)); //save they to distributive
 
     console.log("-- gulp is running task 'minimize:css'");

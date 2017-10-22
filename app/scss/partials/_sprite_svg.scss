@@ -1,0 +1,46 @@
+.icon {
+    font-size: 10px;
+    &:before {
+      content:' ';
+      vertical-align:middle;
+      display: inline-block;
+      background-image: url("../../dist/img/sprite.svg");
+      background-repeat: no-repeat;
+      background-size: 16em 4em;
+
+      .no-svg & {
+        background-image: url("../../dist/img/sprite.png");
+      }
+    }
+}
+
+
+
+
+.icon.deps {
+  &:before {
+      background-position: 0em 0em;
+      width: 16em;
+      height: 2em;
+    }
+  }
+
+  @mixin icon-deps(){
+    @extend .deps;
+  }
+
+
+.icon.uncss {
+  &:before {
+      background-position: 0em -2em;
+      width: 8.8em;
+      height: 2em;
+    }
+  }
+
+  @mixin icon-uncss(){
+    @extend .uncss;
+  }
+
+
+
