@@ -18,12 +18,11 @@ var gulp = require('gulp'), // Connect Gulp
     del = require('del'), // Connect the library to delete files and folders;
     imagemin = require('gulp-imagemin'), // Image Compression
     pngquant = require('imagemin-pngquant'), // Addition to the previous plugin with the ability to compress png
-    spritesmith = require('gulp.spritesmith'), // Creating sprites
-    svgSprite = require("gulp-svg-sprites"), // Creating svg sprites
+    spritesmith = require('gulp.spritesmith'), // Creats png sprites. If you need it - uncomment this string, and also 184 and 194 line
+    svgSprite = require("gulp-svg-sprites"), // Creats svg sprites. If you need it - uncomment this string, and also 185 and 195 line
     svgmin = require('gulp-svgmin'), // compress svg sprites
     uncss = require('gulp-uncss'), //Removes unused in project css code 
-    sourcemaps = require('gulp-sourcemaps'),
-    fs = require('fs'); //node filesystem
+    sourcemaps = require('gulp-sourcemaps');
 
 var path = {
     dist: { //folder of the finished project - distributive
@@ -66,11 +65,11 @@ var path = {
             'app/img/**/*.*', //watch all files in the child directories in the 'img' folder
             '!app/img/sprite/**/*.*' //except 'sprite' folder
         ],
-        sprite: [
-            'app/img/sprite/**/*.*' //watch all files in the child directories in the 'sprite' folder
-            //'!app/img/sprite/**/*.svg' //except 'svg' files
+        sprite_img: [
+            'app/img/sprite/**/*.*', //watch all files in the child directories in the 'sprite' folder
+            '!app/img/sprite/**/*.svg' //except 'svg' files
         ],
-        //sprite_svg: 'app/img/sprite/**/*.svg', //watch all svg files in the 'sprite' folder
+        sprite_svg: 'app/img/sprite/**/*.svg', //watch all svg files in the 'sprite' folder
         fonts: 'app/fonts/**/*.*' //watch all files in the child directories in the 'fonts' folder
     }
 };
@@ -181,7 +180,8 @@ gulp.task('build', [ //create task 'build' which compile project to distributive
     'browser-sync',
     'html',
     'img',
-    'sprite',
+    'sprite:img', //uncomment if you need png retina sprite
+    'sprite:svg', //uncomment if you need svg sprite
     'sass',
     'js',
     'fonts'
@@ -190,7 +190,8 @@ gulp.task('build', [ //create task 'build' which compile project to distributive
 
 gulp.task('watch', ['build'], function() { //create MAIN TASK 'watch' which compile project to distributive and watching out for changes in real time. Compile fast but there is no filesize optimization
     gulp.watch(path.watch.img, ['img']);
-    gulp.watch(path.watch.sprite, ['sprite']);
+    gulp.watch(path.watch.sprite_img, ['sprite:img']); //uncomment if you need png retina sprite
+    gulp.watch(path.watch.sprite_svg, ['sprite:svg']); //uncomment if you need svg sprite
     gulp.watch(path.watch.scss, ['sass']);
     gulp.watch(path.watch.html, ['html']);
     gulp.watch(path.watch.js, ['js']);
