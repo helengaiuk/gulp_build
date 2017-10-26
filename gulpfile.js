@@ -10,18 +10,21 @@ helengaiuk.github.io
 var gulp = require('gulp'), // Connect Gulp
     sass = require('gulp-sass'), //Connect Sass package,
     browserSync = require('browser-sync'), // Connect Browser Sync live realtime desktop http server
+    del = require('del'), // Connect the library to delete files and folders;
     include = require('gulp-include'), // Connect gulp-include (to merge files)
     uglify = require('gulp-uglifyjs'), // Connect gulp-uglifyjs (to minify JS)
     minifycss = require('gulp-minify-css'), // Connect gulp-minify-css (to compressed css)
     cleancss = require('gulp-clean-css'), // Connect gulp-clean-css (makes normall full view css from a compressed view)
     autoprefixer = require('gulp-autoprefixer'), // Connect gulp-autoprefixer (automatically adds prefixes to css)
-    del = require('del'), // Connect the library to delete files and folders;
+    uncss = require('gulp-uncss'), //Removes unused in project css code 
     imagemin = require('gulp-imagemin'), // Image Compression
     pngquant = require('imagemin-pngquant'), // Addition to the previous plugin with the ability to compress png
     spritesmith = require('gulp.spritesmith'), // Creats png sprites. If you need it - uncomment this string, and also 184 and 194 line
     svgSprite = require("gulp-svg-sprites"), // Creats svg sprites. If you need it - uncomment this string, and also 185 and 195 line
     svgmin = require('gulp-svgmin'), // compress svg sprites
-    uncss = require('gulp-uncss'), //Removes unused in project css code 
+    iconfont = require('gulp-iconfont'), // create crossbrowser icon font from svg icons
+    iconfontCss = require('gulp-iconfont-css'), // addon to the previous plugin that generates css
+    runTimestamp = Math.round(Date.now() / 1000),
     sourcemaps = require('gulp-sourcemaps');
 
 var path = {
@@ -30,10 +33,9 @@ var path = {
         js: 'dist/js/',
         css: 'dist/css/',
         img: 'dist/img/',
-        sprite_css: 'app/scss/partials/',
         sprite_svg: 'dist/img/sprite.svg',
-        sprite_svg_css: 'app/scss/partials/_sprite_svg.scss',
-        fonts: 'dist/fonts/'
+        fonts: 'dist/fonts/',
+        iconfont: 'dist/fonts/Iconfont/'
     },
     app: { //folder of working files of the project - application
         html: [
@@ -42,9 +44,12 @@ var path = {
         ],
         js: 'app/js/main.js', //include only the main js file, which is already compiled from other files
         scss: 'app/scss/main.scss', //include only the main scss file, which is already compiled from other files
+        partials_css: 'app/scss/partials/',
+        sprite_svg_css: 'app/scss/partials/_sprite_svg.scss',
         img: [
             'app/img/**/*.*', //include all files in the child directories in the 'img' folder
-            '!app/img/sprite/*.*' //exclude 'sprite' folder
+            '!app/img/sprite/**/*.*', //exclude 'sprite' folder
+            '!app/img/iconfont/**/*.*' //exclude 'iconfont' folder
         ],
         sprite: [
             'app/img/sprite/**/*.*', //include all image files in the child directories in the 'sprite' folder
@@ -52,6 +57,7 @@ var path = {
         ],
         sprite2x: 'app/img/sprite/**/*@2x.*', //include all retina image files in the child directories in the 'sprite' folder with this mask 
         sprite_svg: 'app/img/sprite/**/*.svg', //include all svg image files in the 'sprite' folder
+        iconfont: 'app/img/iconfont/**/*.svg', //include all files in the child directories in the 'iconfont' folder
         fonts: 'app/fonts/**/*.*' //include all files in the child directories in the 'fonts' folder
     },
     watch: { //what files we want to watch
@@ -70,6 +76,7 @@ var path = {
             '!app/img/sprite/**/*.svg' //except 'svg' files
         ],
         sprite_svg: 'app/img/sprite/**/*.svg', //watch all svg files in the 'sprite' folder
+        iconfont: 'app/img/iconfont/**/*.svg', //watch all files in the child directories in the 'iconfont' folder
         fonts: 'app/fonts/**/*.*' //watch all files in the child directories in the 'fonts' folder
     }
 };
@@ -133,7 +140,7 @@ gulp.task('sprite:img', function() { //create task 'sprite', that generate one i
         .pipe(gulp.dest(path.dist.img)) //save generated sprite image to distributive
         .pipe(browserSync.reload({ stream: true })); //reaload server to see changes in browser
     spriteData.css
-        .pipe(gulp.dest(path.dist.sprite_css)); //save sprite stylesheet to distributive
+        .pipe(gulp.dest(path.app.partials_css)); //save sprite stylesheet to app folder
 
 });
 
@@ -143,7 +150,7 @@ gulp.task('sprite:svg', function() {
     gulp.src(path.app.sprite_svg)
         .pipe(svgSprite({
             templates: { scss: true },
-            cssFile: "../" + path.dist.sprite_svg_css,
+            cssFile: "../" + path.app.sprite_svg_css,
             svg: {
                 sprite: "../" + path.dist.sprite_svg
             },
@@ -154,6 +161,26 @@ gulp.task('sprite:svg', function() {
 
 gulp.task('sprite', ['sprite:img', 'sprite:svg']);
 
+gulp.task('iconfont', function() { //this task generates icon font from svg icons
+    console.log("-- gulp is running task 'iconfont'");
+    return gulp.src([path.app.iconfont]) //take all svg images in the 'iconfont' folder
+        .pipe(iconfontCss({ //generate scss stylesheet with your font 
+            fontName: 'Iconfont', //fontname
+            //path: 'app/scss/partials/_iconfont_template.scss',
+            targetPath: '../../../../' + path.app.partials_css + '_iconfont.scss', //relative path to scss final iconfont stylesheet
+            fontPath: '../../' + path.dist.iconfont, //relative path to distributive iconfont folder
+            centerHorizontally: true
+        }))
+        .pipe(iconfont({
+            fontName: 'Iconfont', //fontname
+            formats: ['ttf', 'eot', 'woff', 'woff2', 'svg'], //formats
+            timestamp: runTimestamp, //need for good watching
+            fontHeight: 1001, //(>= 1000)
+            normalize: true
+        }))
+        .pipe(gulp.dest(path.dist.iconfont)); //path to distributive iconfont folder
+});
+
 gulp.task('fonts', function() { //create task 'fonts', that transfer fonts from application to distributive
     console.log("-- gulp is running task 'fonts'");
     gulp.src(path.app.fonts) //take all files in the 'fonts' folder
@@ -162,8 +189,9 @@ gulp.task('fonts', function() { //create task 'fonts', that transfer fonts from 
 });
 
 gulp.task('clean', function() { //create task 'clean' which cleans distributive folder before compilation
-    del.sync('dist'),
-        del.sync(path.dist.sprite_css + "*sprite*.*"); //delete the dist folder    
+    del.sync('dist'), //delete the dist folder  
+        del.sync(path.app.partials_css + "*sprite*.*"); //delete all sprite files
+    del.sync(path.app.partials_css + "*sprite*.*"); //delete all sprite files
 });
 
 gulp.task('browser-sync', function() { //create task 'browser-sync' which starts the server
@@ -182,6 +210,7 @@ gulp.task('build', [ //create task 'build' which compile project to distributive
     'img',
     'sprite:img', //uncomment if you need png retina sprite
     'sprite:svg', //uncomment if you need svg sprite
+    'iconfont', //uncomment if you need iconfont
     'sass',
     'js',
     'fonts'
@@ -192,12 +221,13 @@ gulp.task('watch', ['build'], function() { //create MAIN TASK 'watch' which comp
     gulp.watch(path.watch.img, ['img']);
     gulp.watch(path.watch.sprite_img, ['sprite:img']); //uncomment if you need png retina sprite
     gulp.watch(path.watch.sprite_svg, ['sprite:svg']); //uncomment if you need svg sprite
+    gulp.watch(path.watch.iconfont, ['iconfont']); //uncomment if you need icon font
     gulp.watch(path.watch.scss, ['sass']);
     gulp.watch(path.watch.html, ['html']);
     gulp.watch(path.watch.js, ['js']);
 });
 
-gulp.task('final', ['build'], function() { //create MAIN TASK 'final' which compile project to distributive, compress all images, js and css files, and also removes unused classes from stylesheet 
+gulp.task('final', function() { //create MAIN TASK 'final' which compress all images, js and css files, and also removes unused classes from stylesheet 
     console.log("-- gulp is running task 'minimize:img'");
     gulp.src(path.dist.img + '**/*.*') //take all image files from distributive
         .pipe(imagemin({ //compress images

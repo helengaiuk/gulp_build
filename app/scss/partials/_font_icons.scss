@@ -1,0 +1,30 @@
+@font-face {
+	font-family: "Iconfont";
+	src: url('../fonts/Iconfont/Iconfont.eot');
+	src: url('../fonts/Iconfont/Iconfont.eot?#iefix') format('eot'),
+		url('../fonts/Iconfont/Iconfont.woff2') format('woff2'),
+		url('../fonts/Iconfont/Iconfont.woff') format('woff'),
+		url('../fonts/Iconfont/Iconfont.ttf') format('truetype'),
+		url('../fonts/Iconfont/Iconfont.svg#Iconfont') format('svg');
+}
+
+.icon:before {
+	font-family: "Iconfont";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	/* speak: none; only necessary if not using the private unicode range (firstGlyph option) */
+	text-decoration: none;
+	text-transform: none;
+}
+
+
+.icon-rocket:before {
+	content: "\E001";
+}
+
+.icon-Speaker_Icon:before {
+	content: "\E002";
+}

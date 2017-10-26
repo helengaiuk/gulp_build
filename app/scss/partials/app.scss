@@ -1,5 +1,4 @@
-// if you have _sprite.scss file - uncomment whis string //   /*=include partials/_sprite.*css */
-// if you have and retina sprite too - uncomment whis string //   @include retina-sprites($retina-groups);
+@include retina-sprites($retina-groups); //uncomment when watching if you need retina in your png sprite. delete if no need
 
 /* autoprefixer: on */
 
